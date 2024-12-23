@@ -1,0 +1,1 @@
+That guy hasn't been in office for a while. Why's he still up there?

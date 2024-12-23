@@ -1,0 +1,1 @@
+The lock's... broken? I need to get something to break the lock.
