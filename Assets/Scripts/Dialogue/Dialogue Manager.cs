@@ -5,7 +5,7 @@ using TMPro;
 using Ink.Runtime;
 
 
-//NOTES
+//NOTE
 //This code requires asstes in game to function properly.
 //This code also requires Ink to function and the Ink add-on in Unity.
 //For context, it helps with dialogue.

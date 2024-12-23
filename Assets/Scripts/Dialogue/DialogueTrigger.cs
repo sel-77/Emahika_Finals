@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//NOTES
+//NOTE
 //This code requires assets in game to function properly.
 //This code also requires Ink to function and the Ink add-on in Unity.
 //For context, it helps with dialogue.
