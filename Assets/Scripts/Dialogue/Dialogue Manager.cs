@@ -42,7 +42,7 @@ public class DialogueManager : MonoBehaviour
     private void Start()
     {
         dialogueisPlaying = false;
-        dialoguePanel.SetActive(true);
+        dialoguePanel.SetActive(false);
         dialogueText.text = "";
     }
 
@@ -64,6 +64,7 @@ public class DialogueManager : MonoBehaviour
         Debug.Log("Entering Dialogue Mode");
         currentStory = new Story(inkJSON.text);
         dialogueisPlaying = true;
+        dialoguePanel.SetActive(true);
         ContinueStory();
     }
 
@@ -72,6 +73,7 @@ public class DialogueManager : MonoBehaviour
     {
         Debug.Log("Exiting Dialogue Mode");
         dialogueisPlaying = false;
+        dialoguePanel.SetActive(false);
         dialogueText.text = "";
     }
 
