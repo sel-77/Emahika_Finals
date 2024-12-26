@@ -9,18 +9,17 @@ public class InteractMode : MonoBehaviour
     public Texture2D defaultCursor; // Default cursor sprite
     public Texture2D interactCursor; // Cursor sprite for interactables
     public Texture2D itemCursor; // Cursor sprite for items
+    public Texture2D keypadCursor; // Cursor sprite for keypads
 
     private Camera mainCamera; // Camera to convert screen space to world space
     private bool isHoveringInteractable = false;
     private bool isHoveringItem = false;
+    private bool isHoveringKeypad = false;
     private Item heldItem = null; // Reference to the currently held item
 
     void Start()
     {
-        // Automatically get the main camera
         mainCamera = Camera.main;
-
-        // Set the default cursor at the start
         SetCursor(defaultCursor);
     }
 
@@ -37,15 +36,15 @@ public class InteractMode : MonoBehaviour
 
     private void CheckHoverState()
     {
-        // Cast a ray from the mouse position to detect interactable objects
         Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero, Mathf.Infinity, interactableLayer | itemLayer);
 
         if (hit.collider != null)
         {
-            // Check if the hit object is interactable
             Interactable interactable = hit.collider.GetComponent<Interactable>();
             Item item = hit.collider.GetComponent<Item>();
+            CodePanel codePanel = hit.collider.GetComponent<CodePanel>();
+
             if (interactable != null)
             {
                 if (!isHoveringInteractable)
@@ -57,7 +56,7 @@ public class InteractMode : MonoBehaviour
             }
             else if (item != null)
             {
-                heldItem = item;  // Assign the hovered item to the heldItem variable
+                heldItem = item;
                 if (!isHoveringItem)
                 {
                     SetCursor(itemCursor);
@@ -65,43 +64,60 @@ public class InteractMode : MonoBehaviour
                 }
                 return;
             }
+            else if (codePanel != null)
+            {
+                if (!isHoveringKeypad)
+                {
+                    SetCursor(keypadCursor);
+                    isHoveringKeypad = true;
+                }
+                return;
+            }
         }
-        // If no item is hovered, reset to the default cursor
+
+        // Reset cursors if not hovering over specific objects
         if (isHoveringItem)
         {
             SetCursor(defaultCursor);
             isHoveringItem = false;
         }
-
-        // If no interactable is hovered, reset to the default cursor
         if (isHoveringInteractable)
         {
             SetCursor(defaultCursor);
             isHoveringInteractable = false;
         }
+        if (isHoveringKeypad)
+        {
+            SetCursor(defaultCursor);
+            isHoveringKeypad = false;
+        }
     }
 
     private void Interact()
     {
-        // Cast a ray from the mouse position to detect interactable objects
         Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero, Mathf.Infinity, interactableLayer);
 
         if (hit.collider != null)
         {
-            // Check if the hit object is interactable
             Interactable interactable = hit.collider.GetComponent<Interactable>();
+            Item item = hit.collider.GetComponent<Item>();
+            CodePanel codePanel = hit.collider.GetComponent<CodePanel>();
+
             if (interactable != null)
             {
-                // Only interact if the item is compatible
-                interactable.OnInteract(heldItem);  // Pass the heldItem to the OnInteract method
+                interactable.OnInteract(heldItem);
+            }
+            else if (codePanel != null)
+            {
+                codePanel.OpenKeypad();
             }
         }
     }
 
     private void SetCursor(Texture2D cursor)
     {
-        Vector2 hotspot = Vector2.zero; // Adjust if necessary (e.g., center the cursor)
+        Vector2 hotspot = Vector2.zero;
         Cursor.SetCursor(cursor, hotspot, CursorMode.Auto);
     }
 
