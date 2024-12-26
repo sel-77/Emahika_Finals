@@ -10,8 +10,6 @@ using UnityEngine;
 
 public class DialogueTrigger : MonoBehaviour
 {
-    [Header("Visual Cue")]
-    [SerializeField] private GameObject visualCue;
 
     [Header("Ink JSON")]
     [SerializeField] private TextAsset inkJSON;
@@ -24,7 +22,6 @@ public class DialogueTrigger : MonoBehaviour
     private void Awake()
     {
         cursorInRange = false;
-        visualCue.SetActive(false);
     }
 
     private void Update()
@@ -36,7 +33,6 @@ public class DialogueTrigger : MonoBehaviour
         if (distanceToObject <= triggerRadius && !DialogueManager.GetInstance().dialogueisPlaying)
         {
             cursorInRange = true;
-            visualCue.SetActive(true);
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -46,7 +42,6 @@ public class DialogueTrigger : MonoBehaviour
         else
         {
             cursorInRange = false;
-            visualCue.SetActive(false);
         }
     }
 }
